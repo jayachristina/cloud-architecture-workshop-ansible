@@ -12,24 +12,6 @@
     state: present
     definition: "{{ lookup('template', 'keycloak-application.yaml.j2') }}"
 
-- name: Wait for keycloak to be ready
-  kubernetes.core.k8s_info:
-    api_version: apps/v1
-    kind: statefulset
-    namespace: "{{ ocp4_workload_cloud_architecture_workshop_keycloak_namespace }}"
-    label_selectors:
-      - app = keycloak
-  register: r_keycloak_statefulset
-  retries: 60
-  delay: 10
-  changed_when: false
-  until:
-    - r_keycloak_statefulset.resources is defined
-    - r_keycloak_statefulset.resources | length | int > 0
-    - r_keycloak_statefulset.resources[0].status.readyReplicas is defined
-    - r_keycloak_statefulset.resources[0].status.replicas is defined
-    - r_keycloak_statefulset.resources[0].status.readyReplicas == r_keycloak_statefulset.resources[0].status.replicas
-
 - name: Deploy Keycloak import realm application
   kubernetes.core.k8s:
     state: present

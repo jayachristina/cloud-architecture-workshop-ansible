@@ -23,6 +23,7 @@ spec:
     path: {{ ocp4_workload_cloud_architecture_workshop_keycloak_realm_import_gitops_repo_path }}
     helm:
       values: |
+        nameOverride: keycloak-realm-import-{{ocp4_workload_cloud_architecture_workshop_user_prefix}}{{ n }}
         keycloak:
           name: {{ ocp4_workload_cloud_architecture_workshop_keycloak_custom_resource_name }}
         realm:
@@ -31,4 +32,6 @@ spec:
           clientRealmManagementContainerId: "{{ lookup('password', '/dev/null chars=ascii_letters,15') | to_uuid }}"
           clientBrokerContainerId: "{{ lookup('password', '/dev/null chars=ascii_letters,15') | to_uuid }}"
           accountContainerId: "{{ lookup('password', '/dev/null chars=ascii_letters,15') | to_uuid }}"
+        hook:
+          maxTimeToWait: 120000        
 {% endfor %}
