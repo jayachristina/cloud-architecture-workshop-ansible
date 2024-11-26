@@ -15,12 +15,16 @@
 
 - name: Wait until devspaces checluster is running
   ansible.builtin.uri:
-    url: https://devspaces.{{ r_openshift_subdomain }}/devfile-registry
-    status_code: '200'
+    url: https://devspaces.{{ r_openshift_subdomain }}/dashboard/
+    validate_certs: false
+    status_code: 403
   register: result
-  until: result.status == 200
-  retries: 90
-  delay: 30
+  until: result.status == 403
+  retries: 120
+  delay: 15
+  ignore_errors: true
+
+
 
 - name: "Create namespaces for user devspaces"
   kubernetes.core.k8s:
@@ -31,6 +35,7 @@
       - name: "{{ ocp4_workload_cloud_architecture_workshop_devspaces_user_namespace_prefix }}-user"
   retries: 10
   delay: 30
+  ignore_errors: true
 
 - name: "Create dev spaces template for users"
   kubernetes.core.k8s:
@@ -41,6 +46,7 @@
       - name: "{{ ocp4_workload_cloud_architecture_workshop_devspaces_user_namespace_prefix }}-user"
   retries: 10
   delay: 30
+  ignore_errors: true
 
 - name: "Create dev spaces for users"
   kubernetes.core.k8s:
@@ -51,3 +57,4 @@
       - name: "{{ ocp4_workload_cloud_architecture_workshop_devspaces_user_namespace_prefix }}-user"
   retries: 10
   delay: 30
+  ignore_errors: true

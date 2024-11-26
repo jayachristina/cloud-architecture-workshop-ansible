@@ -42,9 +42,6 @@
 - name: Install 3scale with Gitops
   ansible.builtin.include_tasks: threescale-gitops.yml
 
-- name: Install Devspaces
-  ansible.builtin.include_tasks: devspaces.yml
-
 - name: Patch Web Terminal template
   ansible.builtin.include_tasks: webterminal_image.yml
 
@@ -65,3 +62,6 @@
 
 - name: Install Showroom
   ansible.builtin.include_tasks: showroom.yml
+
+- name: Install Devspaces
+  ansible.builtin.include_tasks: devspaces.yml
